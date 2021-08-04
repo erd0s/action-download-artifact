@@ -67,16 +67,14 @@ async function main() {
             }
             )) {
                 const run = runs.data.find(r => {
+                    let workflowConclusionMatch = workflowConclusion.includes(r.status) || workflowConclusion.includes(r.conclusion)
                     if (commit) {
-                        return r.head_sha == commit
+                        return r.head_sha == commit && workflowConclusionMatch
                     }
                     if (runNumber) {
-                        return r.run_number == runNumber
+                        return r.run_number == runNumber && workflowConclusionMatch
                     }
-                    if (workflowConclusion.length > 0) {
-                        return workflowConclusion.includes(r.status) || workflowConclusion.includes(r.conclusion)
-                    }
-                    return true
+                    return workflowConclusionMatch
                 })
 
                 if (run) {
